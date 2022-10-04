@@ -33,8 +33,7 @@
 /*----------------------------------------------------------------------------
 MESH TO LOAD
 ----------------------------------------------------------------------------*/
-// this mesh is a dae file format but you should be able to use any other format too, obj is typically what is used
-// put the mesh in your project directory, or provide a filepath for it here
+
 #define MESH_NAME "./meshes/white_key.dae"
 #define MESH_NAME2 "./meshes/black_key.dae"
 #define MESH_NAME3 "./meshes/base.dae"
@@ -245,12 +244,6 @@ GLuint CompileShaders(const char* vertexShader, const char* fragmentShader)
 // VBO Functions - click on + to expand
 #pragma region VBO_FUNCTIONS
 void generateObjectBufferMesh() {
-	/*----------------------------------------------------------------------------
-	LOAD MESH HERE AND COPY INTO BUFFERS
-	----------------------------------------------------------------------------*/
-
-	//Note: you may get an error "vector subscript out of range" if you are using this code for a mesh that doesnt have positions and normals
-	//Might be an idea to do a check for that before generating and binding the buffer.
 
 	mesh_data = load_mesh(MESH_NAME);
 	mesh_data2 = load_mesh(MESH_NAME2);
@@ -307,11 +300,10 @@ void generateObjectBufferMesh() {
 	glBindBuffer(GL_ARRAY_BUFFER, vn_vbo[0]);
 	glVertexAttribPointer(loc2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-	//	This is for texture coordinates which you don't currently need, so I have commented it out
 	glEnableVertexAttribArray (loc3);
 	glBindBuffer (GL_ARRAY_BUFFER, vt_vbo[0]);
 	glVertexAttribPointer (loc3, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-
+	
 
 	//black key
 	glGenBuffers(1, &vp_vbo[1]);
@@ -462,7 +454,6 @@ void display() {
 	glBindVertexArray(vao[2]);
 
 
-
 	//base
 	mat4 base = identity_mat4();
 	base = rotate_y_deg(base, -90.0f);
@@ -471,7 +462,6 @@ void display() {
 
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, base.m);
 	glDrawArrays(GL_TRIANGLES, 0, mesh_data3.mPointCount);
-
 
 
 	//white keys
@@ -543,21 +533,9 @@ void display() {
 	glUniformMatrix4fv(matrix_location, 1, GL_FALSE, white_key8.m);
 	glDrawArrays(GL_TRIANGLES, 0, mesh_data.mPointCount);
 
-
 	
 	//black keys
-	//glUseProgram(blackKeyShader);
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
-
-	//Declare your uniform variables that will be used in your shader
-	//matrix_location = glGetUniformLocation(blackKeyShader, "model");
-	//view_mat_location = glGetUniformLocation(blackKeyShader, "view");
-	//proj_mat_location = glGetUniformLocation(blackKeyShader, "proj");
-
-	//update uniforms & draw
-	//glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, persp_proj.m);
-	//glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view.m);
-
 	glBindVertexArray(vao[1]);
 
 	mat4 black_key = identity_mat4();
@@ -601,7 +579,6 @@ void display() {
 	glDrawArrays(GL_TRIANGLES, 0, mesh_data2.mPointCount);
 
 
-
 	//floor
 	glBindVertexArray(vao[3]);
 
@@ -626,7 +603,6 @@ void updateScene() {
 	last_time = curr_time;
 
 	if (rotate_white_1 == 5.0f) {
-		
 		if (count < 2400) {
 			return_white_1 -= 5.0f * delta;
 			count++;
@@ -636,11 +612,8 @@ void updateScene() {
 			return_white_1 = 0.0f;
 			count = 0;
 		}
-		
 	}
-
 	if (rotate_white_3 == 5.0f) {
-
 		if (count < 2400) {
 			return_white_3 -= 5.0f * delta;
 			count++;
@@ -650,11 +623,8 @@ void updateScene() {
 			return_white_3 = 0.0f;
 			count = 0;
 		}
-
 	}
-
 	if (rotate_white_5 == 5.0f) {
-
 		if (count < 2400) {
 			return_white_5 -= 5.0f * delta;
 			count++;
@@ -664,11 +634,8 @@ void updateScene() {
 			return_white_5 = 0.0f;
 			count = 0;
 		}
-
 	}
-
 	if (rotate_white_6 == 5.0f) {
-
 		if (count < 2400) {
 			return_white_6 -= 5.0f * delta;
 			count++;
@@ -678,11 +645,8 @@ void updateScene() {
 			return_white_6 = 0.0f;
 			count = 0;
 		}
-
 	}
-
 	if (rotate_white_7 == 5.0f) {
-
 		if (count < 2400) {
 			return_white_7 -= 5.0f * delta;
 			count++;
@@ -692,11 +656,8 @@ void updateScene() {
 			return_white_7 = 0.0f;
 			count = 0;
 		}
-
 	}
-
 	if (rotate_black_2 == 5.0f) {
-
 		if (count < 2400) {
 			return_black_2 -= 5.0f * delta;
 			count++;
@@ -706,11 +667,8 @@ void updateScene() {
 			return_black_2 = 0.0f;
 			count = 0;
 		}
-
 	}
-
 	if (rotate_black_3 == 5.0f) {
-
 		if (count < 2400) {
 			return_black_3 -= 5.0f * delta;
 			count++;
@@ -720,11 +678,8 @@ void updateScene() {
 			return_black_3 = 0.0f;
 			count = 0;
 		}
-
 	}
-
 	if (rotate_black_5 == 5.0f) {
-
 		if (count < 2400) {
 			return_black_5 -= 5.0f * delta;
 			count++;
@@ -734,10 +689,8 @@ void updateScene() {
 			return_black_5 = 0.0f;
 			count = 0;
 		}
-
 	}
 	
-
 	// Draw the next frame
 	glutPostRedisplay();
 }
@@ -835,9 +788,7 @@ void keypress(unsigned char key, int x, int y) {
 		rotate_white_6 = 5.0f;
 		translate_base = vec3(0.0f, 0.0f, 2.0f);
 		break;
-	}
-		
-
+	}	
 }
 
 int main(int argc, char** argv) {
